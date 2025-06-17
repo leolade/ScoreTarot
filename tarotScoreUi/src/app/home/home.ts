@@ -11,6 +11,7 @@ import {
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
+import {ScoreTarotHttpService} from '../http/score-tarot-http.service';
 
 @Component({
   selector: 'app-home',
@@ -28,15 +29,14 @@ import {
   styleUrl: './home.css'
 })
 export class Home {
-  httpClient: HttpClient = inject(HttpClient);
+  scoreTarotHttpService: ScoreTarotHttpService = inject(ScoreTarotHttpService);
   router: Router = inject(Router);
 
   onNewGameClickHandler() {
-    this.httpClient.post('http://localhost:8080/game/new', undefined)
-      .pipe(catchError(() => of(void 0)))
+    this.scoreTarotHttpService.newGame()
       .subscribe(
-        () => {
-          this.router.navigate(['fdf', 'rounds']).then();
+        (id: string) => {
+          this.router.navigate([id.replace(/"/g, ''), 'rounds']).then();
         }
       )
   }

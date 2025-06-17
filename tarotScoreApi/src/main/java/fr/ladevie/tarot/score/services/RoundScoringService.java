@@ -5,22 +5,24 @@ import fr.ladevie.tarot.score.business.RoundEntity;
 import fr.ladevie.tarot.score.business.enums.ChelemStatus;
 import fr.ladevie.tarot.score.business.enums.ContractType;
 import fr.ladevie.tarot.score.business.enums.PetitAuBoutStatus;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@Service
 public class RoundScoringService {
 
     public Map<UUID, Integer> calculerScores(RoundEntity round) {
         Map<UUID, Integer> score = new HashMap<>();
-        int nbPlayers = round.getGame().getPlayers().size();
+        int nbPlayers = round.getPlayers().size();
         int ecart = round.getScoreAttaque() - seuilPourGagner(round.getNombreBouts());
 
         boolean contratReussi = ecart >= 0;
 
         int base = baseScore(round.getContractType());
-        int primePetit = primePetitAuBout(round.getPetitStatus());
+        int primePetit = primePetitAuBout(round.getPetitAuBoutStatus());
         int primeChelem = primeChelem(round.getChelemStatus());
         int primesPoignees = 20 * round.getPoigneeSimples().size()
                 + 30 * round.getPoigneeDoubles().size()

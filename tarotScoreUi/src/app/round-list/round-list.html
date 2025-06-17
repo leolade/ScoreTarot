@@ -1,1 +1,19 @@
-<h1>test</h1>
+@let gameValue = game();
+@if (gameValue.rounds) {
+  <ion-grid>
+    <ion-row>
+      @for (player of gameValue.players; track player.id) {
+        <ion-col>{{player.name}}</ion-col>
+      }
+    </ion-row>
+    @for (round of gameValue.rounds; track round.id) {
+      <ion-row>
+        @for (player of gameValue.players; track player.id) {
+          @if (player.id) {
+            <ion-col>{{round.scores[player.id]}}</ion-col>
+          }
+        }
+      </ion-row>
+    }
+  </ion-grid>
+}

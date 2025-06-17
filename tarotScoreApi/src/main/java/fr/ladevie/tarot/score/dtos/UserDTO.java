@@ -1,18 +1,18 @@
 package fr.ladevie.tarot.score.dtos;
 
+import fr.ladevie.tarot.score.business.PlayerEntity;
+
 import java.util.UUID;
 
 public class UserDTO {
     private UUID id; // null si nouveau joueur
     private String name;
 
-    // Constructeurs, getters, setters
-
     public UserDTO() {}
 
-    public UserDTO(UUID id, String name) {
-        this.id = id;
-        this.name = name;
+    public UserDTO(PlayerEntity player) {
+        this.id = player.getId();
+        this.name = player.getName();
     }
 
     public UUID getId() { return id; }

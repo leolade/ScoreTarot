@@ -19,7 +19,7 @@ public class RoundEntity {
     private ContractType contractType;
 
     @Enumerated(EnumType.STRING)
-    private PetitAuBoutStatus petitStatus;
+    private PetitAuBoutStatus petitAuBoutStatus;
 
     @Enumerated(EnumType.STRING)
     private ChelemStatus chelemStatus;
@@ -97,12 +97,12 @@ public class RoundEntity {
         this.contractType = contractType;
     }
 
-    public PetitAuBoutStatus getPetitStatus() {
-        return petitStatus;
+    public PetitAuBoutStatus getPetitAuBoutStatus() {
+        return petitAuBoutStatus;
     }
 
-    public void setPetitStatus(PetitAuBoutStatus petitStatus) {
-        this.petitStatus = petitStatus;
+    public void setPetitAuBoutStatus(PetitAuBoutStatus petitStatus) {
+        this.petitAuBoutStatus = petitStatus;
     }
 
     public ChelemStatus getChelemStatus() {
@@ -119,30 +119,6 @@ public class RoundEntity {
 
     public void setScoreAttaque(Integer scoreAttaque) {
         this.scoreAttaque = scoreAttaque;
-    }
-
-    public boolean isPetitAuBout() {
-        return petitAuBout;
-    }
-
-    public void setPetitAuBout(boolean petitAuBout) {
-        this.petitAuBout = petitAuBout;
-    }
-
-    public boolean isPoignee() {
-        return poignee;
-    }
-
-    public void setPoignee(boolean poignee) {
-        this.poignee = poignee;
-    }
-
-    public boolean isChelem() {
-        return chelem;
-    }
-
-    public void setChelem(boolean chelem) {
-        this.chelem = chelem;
     }
 
     public PlayerEntity getTaker() {
