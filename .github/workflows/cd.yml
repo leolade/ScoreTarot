@@ -1,0 +1,88 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+
+name: Java CI with Gradle
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+
+     # Frontend build & test
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 22
+        
+    - name: Install frontend deps (yarn)
+      working-directory: ./tarotScoreUi
+      run: yarn install --frozen-lockfile
+
+    - name: Build frontend
+      working-directory: ./tarotScoreUi
+      run: ng build
+      
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+
+    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
+    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+
+    - name: Build with Gradle Wrapper
+      working-directory: ./tarotScoreApi
+      run: ./gradlew build -x test
+
+    - name: Docker Login
+    # You may pin to the exact commit or the version.
+    # uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772
+      uses: docker/login-action@v3.4.0
+      with:
+        # Server address of Docker registry. If not set then will default to Docker Hub
+        registry: leolade
+        # Username used to log against the Docker registry
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        # Password or personal access token used to log against the Docker registry
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+            
+   # Build and push frontend Docker image
+    - name: Build and push frontend image
+      working-directory: ./tarotScoreUi
+      run: |
+        docker build -t leolade/score-tarot-ui:latest .
+        docker push leolade/score-tarot-ui:latest
+        
+
+    # Build and push backend Docker image
+    - name: Build and push backend image
+      working-directory: ./tarotScoreApi
+      run: |
+        docker build -t leolade/score-tarot-api:latest .
+        docker push leolade/score-tarot-api:latest
+
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        script: |
+          systemctl restart score-tarot-ui
+          systemctl restart score-tarot-api
