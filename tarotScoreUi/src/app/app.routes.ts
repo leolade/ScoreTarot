@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';
 import {gameRoundsResolver} from './round-list/game-rounds-resolver';
+import {roundResolver} from './round-form/round-resolver';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,15 @@ export const routes: Routes = [
     pathMatch: 'full',
     resolve: {
       game: gameRoundsResolver
+    }
+  },
+  {
+    path: ':gameId/round/:roundId',
+    loadComponent: () => import('./round-form/round-form').then(m => m.RoundForm),
+    pathMatch: 'full',
+    resolve: {
+      game: gameRoundsResolver,
+      round: roundResolver,
     }
   }
 ];

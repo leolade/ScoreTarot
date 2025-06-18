@@ -1,4 +1,14 @@
-import {Component, effect, inject, input, linkedSignal, signal, WritableSignal} from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  effect,
+  inject,
+  input,
+  linkedSignal,
+  signal,
+  untracked,
+  WritableSignal
+} from '@angular/core';
 import {GameDto} from '../dtos/game-dto';
 import {PlayerDto} from '../dtos/player-dto';
 import {
@@ -54,18 +64,20 @@ export function arrayMinLengthValidator(minLenght: number): ValidatorFn {
     IonButtons,
     IonIcon,
     NgClass,
-    IsAttaqueWinningPipe
+    IsAttaqueWinningPipe,
   ],
   templateUrl: './round-form.html',
   styleUrl: './round-form.css'
 })
 export class RoundForm {
   location: Location = inject(Location);
+  cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
   router: Router = inject(Router);
   scoreTarotHttpService: ScoreTarotHttpService = inject(ScoreTarotHttpService);
 
   contrats: ContractType[] = ['PETITE', 'GARDE', 'GARDE_SANS', 'GARDE_CONTRE']
   game = input.required<GameDto>();
+  round = input<RoundDto>();
   chelemAnnonce: WritableSignal<boolean> = signal(false);
   scoreAttaque: WritableSignal<number> = signal(50);
   chelemAnnonceFC: FormControl<boolean> = new FormControl<boolean>(false, {nonNullable: true});
@@ -120,6 +132,67 @@ export class RoundForm {
     });
     effect(() => {
       this.form.controls.chelemStatus.setValue(this.calculateChelemStatus(this.chelemAnnonce(), this.scoreAttaque()));
+    });
+    effect(() => {
+      const round: RoundDto | undefined = this.round();
+      if (!round) {
+        return;
+      }
+      this.selectedPlayers.set(
+        untracked(this.availablePlayers).filter(
+          (availablePlayers) => {
+            return round.players.find((roundPlauer) => roundPlauer.id === availablePlayers.id)
+          }
+        )
+      )
+      this.miserePlayers.set(
+        untracked(this.availablePlayers).filter(
+          (availablePlayers) => {
+            return round.misereSimples.find((roundPlauer) => roundPlauer.id === availablePlayers.id)
+          }
+        )
+      );
+      this.doubleMiserePlayers.set(
+        untracked(this.availablePlayers).filter(
+          (availablePlayers) => {
+            return round.misereDoubles.find((roundPlauer) => roundPlauer.id === availablePlayers.id)
+          }
+        )
+      );
+      this.poigneePlayers.set(
+        untracked(this.availablePlayers).filter(
+          (availablePlayers) => {
+            return round.poigneeSimples.find((roundPlauer) => roundPlauer.id === availablePlayers.id)
+          }
+        )
+      );
+      this.doublePoigneePlayers.set(
+        untracked(this.availablePlayers).filter(
+          (availablePlayers) => {
+            return round.poigneeDoubles.find((roundPlauer) => roundPlauer.id === availablePlayers.id)
+          }
+        )
+      );
+      this.triplePoigneePlayers.set(
+        untracked(this.availablePlayers).filter(
+          (availablePlayers) => {
+            return round.poigneeTriple.find((roundPlauer) => roundPlauer.id === availablePlayers.id)
+          }
+        )
+      );
+      if (round.chelemStatus === 'ANNONCE_REUSSI' || round.chelemStatus === 'ANNONCE_RATE') {
+        this.chelemAnnonceFC.setValue(true);
+      }
+      this.form.patchValue({
+        id: round.id,
+        contractType: round.contractType,
+        petitStatus: round.petitStatus,
+        scoreAttaque: round.scoreAttaque,
+        nombreBouts: round.nombreBouts,
+        taker: untracked(this.availablePlayers).find((availablePlayers) => availablePlayers.id === round.taker.id),
+        called: round.called ? untracked(this.availablePlayers).find((availablePlayers) => availablePlayers.id === round.called?.id) : null,
+      })
+
     });
 
     this.chelemAnnonceFC.valueChanges
@@ -184,6 +257,7 @@ export class RoundForm {
       valeursListe.push(player);
     }
     liste.set(valeursListe);
+    this.cdr.detectChanges();
   }
 
   onNavigateBack() {
@@ -195,14 +269,26 @@ export class RoundForm {
   }
 
   onValidateClickHandler() {
-    this.scoreTarotHttpService.newRound(
-      this.game().id,
-      this.form.value as RoundDto
-    ).subscribe(
-      () => {
-        this.onNavigateBack();
-      }
-    )
+    const roundId = this.round()?.id;
+    if (!roundId) {
+      this.scoreTarotHttpService.newRound(
+        this.game().id,
+        this.form.value as RoundDto
+      ).subscribe(
+        () => {
+          this.onNavigateBack();
+        }
+      )
+    } else {
+      this.scoreTarotHttpService.editRound(
+        roundId,
+        this.form.value as RoundDto
+      ).subscribe(
+        () => {
+          this.onNavigateBack();
+        }
+      )
+    }
   }
 
   selectTaker(player: PlayerDto) {

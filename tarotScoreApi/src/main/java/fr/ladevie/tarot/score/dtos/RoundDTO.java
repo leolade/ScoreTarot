@@ -42,6 +42,7 @@ public class RoundDTO {
         this.contractType = entity.getContractType();
         this.petitStatus = entity.getPetitAuBoutStatus();
         this.chelemStatus = entity.getChelemStatus();
+        this.nombreBouts = entity.getNombreBouts();
         this.scoreAttaque = entity.getScoreAttaque();
         this.taker = new UserDTO(entity.getTaker());
         this.called = entity.getCalled() == null ? null : new UserDTO(entity.getCalled());

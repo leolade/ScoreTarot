@@ -21,7 +21,7 @@
     <ion-item-divider>
       <ion-label>Sélection des joueurs</ion-label>
     </ion-item-divider>
-    @for (player of players; track player.id) {
+    @for (player of players; track player.id + player.name) {
       <ion-chip
         (click)="onAddPlayerClickHandler(player)"
         [outline]="!selectedPlayersValue.includes(player)"
@@ -62,7 +62,7 @@
       </ion-chip>
     }
     <div></div>
-    @for (player of selectedPlayersValue; track player.id) {
+    @for (player of selectedPlayersValue; track player.id + player.name) {
       <ion-chip
         (click)="selectTaker(player)"
         [outline]="form.controls.taker.value !== player">
@@ -78,7 +78,7 @@
     <ion-item-divider>
       <ion-label>Misère</ion-label>
     </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id) {
+    @for (player of selectedPlayersValue; track player.id + player.name) {
       <ion-chip
         (click)="togglePlayerAnnonce(player, 'MISERE')"
         [outline]="!playerWithMisere.includes(player)">
@@ -91,7 +91,7 @@
     <ion-item-divider>
       <ion-label>Double misère</ion-label>
     </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id) {
+    @for (player of selectedPlayersValue; track player.id + player.name) {
       <ion-chip
         (click)="togglePlayerAnnonce(player, 'DOUBLE_MISERE')"
         [outline]="!playerWithDoubleMisere.includes(player)">
@@ -104,7 +104,7 @@
     <ion-item-divider>
       <ion-label>Poignée (8 atouts)</ion-label>
     </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id) {
+    @for (player of selectedPlayersValue; track player.id + player.name) {
       <ion-chip
         (click)="togglePlayerAnnonce(player, 'POIGNEE')"
         [outline]="!playerWithPoignee.includes(player)">
@@ -117,7 +117,7 @@
     <ion-item-divider>
       <ion-label>Double poignée (10 atouts)</ion-label>
     </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id) {
+    @for (player of selectedPlayersValue; track player.id + player.name) {
       <ion-chip
         (click)="togglePlayerAnnonce(player, 'DOUBLE_POIGNEE')"
         [outline]="!playerWithDoublePoignee.includes(player)">
@@ -130,7 +130,7 @@
     <ion-item-divider>
       <ion-label>Triple poignée (13 atouts)</ion-label>
     </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id) {
+    @for (player of selectedPlayersValue; track player.id + player.name) {
       <ion-chip
         (click)="togglePlayerAnnonce(player, 'TRIPLE_POIGNEE')"
         [outline]="!playerWithTriplePoignee.includes(player)">
@@ -143,7 +143,7 @@
     <ion-item-divider>
       <ion-label>Associé</ion-label>
     </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id) {
+    @for (player of selectedPlayersValue; track player.id + player.name) {
       <ion-chip
         (click)="selectCalled(player)"
         [outline]="form.controls.called.value !== player"
@@ -178,7 +178,7 @@
     <ion-chip
       (click)="onSelectnombreBouts(0)"
       [outline]="form.controls.nombreBouts.value !== 0">
-      Aucun bout
+      Aucun bout {{form.controls.nombreBouts.value}}
     </ion-chip>
     <ion-chip
       (click)="onSelectnombreBouts(1)"
@@ -201,7 +201,8 @@
         <span>{{ form.controls.scoreAttaque.value }}</span>
       </div>
       <input type="range" min="0" max="91" value="50" [formControl]="form.controls.scoreAttaque">
-      <div [ngClass]="{winning: !(form.controls.scoreAttaque.value | isAttaqueWinning : form.controls.nombreBouts.value)}">
+      <div
+        [ngClass]="{winning: !(form.controls.scoreAttaque.value | isAttaqueWinning : form.controls.nombreBouts.value)}">
         <span>DEF</span>
         <span> {{ 91 - form.controls.scoreAttaque.value }}</span>
       </div>

@@ -12,4 +12,21 @@ ion-col {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  align-self: center;
+}
+
+ion-col.score {
+  font-size: 16px;
+}
+
+ion-col.positive {
+  color: green;
+}
+
+ion-col.negative {
+  color: red;
+}
+
+ion-col.taker {
+  font-weight: bold;
 }

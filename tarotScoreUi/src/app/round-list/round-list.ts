@@ -1,4 +1,4 @@
-import {Component, effect, inject, input} from '@angular/core';
+import {Component, computed, effect, inject, input, linkedSignal, Signal, WritableSignal} from '@angular/core';
 import {GameDto} from '../dtos/game-dto';
 import {
   IonButton,
@@ -8,13 +8,17 @@ import {
   IonFabButton,
   IonGrid,
   IonHeader,
-  IonIcon,
+  IonIcon, IonItemDivider, IonLabel,
   IonRow,
   IonTitle,
   IonToolbar
 } from '@ionic/angular/standalone';
 import {Router} from '@angular/router';
-import {Location} from '@angular/common';
+import {Location, NgClass} from '@angular/common';
+import {RoundWithScoreDto} from '../dtos/round-with-score-dto';
+import {ScoreTarotHttpService} from '../http/score-tarot-http.service';
+import {IsMaxScorePipe} from './is-max-score-pipe';
+import {SumScoreForPlayerPipe} from './sum-score-for-player-pipe';
 
 @Component({
   selector: 'app-round-list',
@@ -29,18 +33,23 @@ import {Location} from '@angular/common';
     IonTitle,
     IonToolbar,
     IonButtons,
-    IonButton
+    IonButton,
+    NgClass,
+    IsMaxScorePipe,
+    SumScoreForPlayerPipe,
+    IonItemDivider,
+    IonLabel
   ],
   templateUrl: './round-list.html',
   styleUrl: './round-list.css'
 })
 export class RoundList {
-  rounds: any[] = [];
-  players: string[] = ['Léo', 'Lynianna', 'Quentin', 'Antoine', 'Alban'];
-
   router: Router = inject(Router);
   location: Location = inject(Location);
+  tarotHttpService: ScoreTarotHttpService = inject(ScoreTarotHttpService);
   game = input.required<GameDto>();
+  rounds: WritableSignal<RoundWithScoreDto[]> = linkedSignal(() => this.game().rounds);
+  scores: Signal<{ [p in string]: number }[]> = computed(() => this.rounds().map(r => r.scores))
 
   constructor() {
     effect(() => {
@@ -54,5 +63,23 @@ export class RoundList {
 
   onNavigateBack() {
     this.location.back();
+  }
+
+  onEditClickHandler(roundId: string | undefined) {
+    if (!roundId) {
+      return;
+    }
+    this.router.navigate([this.game().id, 'round', roundId]).then();
+  }
+
+  onDeleteClickHandler(roundId: string | undefined) {
+    if (!roundId) {
+      return;
+    }
+    this.tarotHttpService.deleteRound(roundId).subscribe(
+      () => {
+        this.rounds.set(this.rounds().filter((round) => round.id !== roundId));
+      }
+    )
   }
 }
