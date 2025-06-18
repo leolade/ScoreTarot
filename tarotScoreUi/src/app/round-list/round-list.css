@@ -1,0 +1,15 @@
+ion-row {
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+ion-col {
+  padding: 0px;
+  text-align: center;
+  font-size: 12px;
+  flex: 1 1 0px;
+  width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

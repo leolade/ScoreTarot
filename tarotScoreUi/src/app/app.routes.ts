@@ -14,5 +14,13 @@ export const routes: Routes = [
     resolve: {
       game: gameRoundsResolver
     }
+  },
+  {
+    path: ':gameId/round/new',
+    loadComponent: () => import('./round-form/round-form').then(m => m.RoundForm),
+    pathMatch: 'full',
+    resolve: {
+      game: gameRoundsResolver
+    }
   }
 ];

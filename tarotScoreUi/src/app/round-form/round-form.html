@@ -1,0 +1,213 @@
+@let players = availablePlayers();
+@let selectedPlayersValue = selectedPlayers();
+@let playerWithMisere = miserePlayers();
+@let playerWithDoubleMisere = doubleMiserePlayers();
+@let playerWithPoignee = poigneePlayers();
+@let playerWithDoublePoignee = doublePoigneePlayers();
+@let playerWithTriplePoignee = triplePoigneePlayers();
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="onNavigateBack()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        Retour
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Saisie d'une partie</ion-title>
+  </ion-toolbar>
+</ion-header>
+<section class="scrollable">
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Sélection des joueurs</ion-label>
+    </ion-item-divider>
+    @for (player of players; track player.id) {
+      <ion-chip
+        (click)="onAddPlayerClickHandler(player)"
+        [outline]="!selectedPlayersValue.includes(player)"
+        [disabled]="!selectedPlayersValue.includes(player) && selectedPlayersValue.length === 5">
+        {{ player.name }}
+      </ion-chip>
+    }
+    <ion-item lines="none">
+      <ion-input label="Nouveau joueur" placeholder="Entrez le nom"
+                 (keyup.enter)="onAjouterJoueurClickHandler()"
+                 [formControl]="nomNouveauJoueurFC"></ion-input>
+      <ion-button (click)="onAjouterJoueurClickHandler()">Ajouter</ion-button>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Contrat</ion-label>
+    </ion-item-divider>
+    @for (contrat of contrats; track contrat) {
+      <ion-chip
+        (click)="onContratSelected(contrat)"
+        [outline]="form.controls.contractType.value !== contrat">
+        @switch (contrat) {
+          @case ('PETITE') {
+            Petite
+          }
+          @case ('GARDE') {
+            Garde
+          }
+          @case ('GARDE_SANS') {
+            Garde sans
+          }
+          @case ('GARDE_CONTRE') {
+            Garde contre
+          }
+        }
+      </ion-chip>
+    }
+    <div></div>
+    @for (player of selectedPlayersValue; track player.id) {
+      <ion-chip
+        (click)="selectTaker(player)"
+        [outline]="form.controls.taker.value !== player">
+        {{ player.name }}
+      </ion-chip>
+    }
+    <ion-item lines="none">
+      <ion-toggle [formControl]="chelemAnnonceFC">Chelem annoncé</ion-toggle>
+    </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Misère</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'MISERE')"
+        [outline]="!playerWithMisere.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Double misère</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'DOUBLE_MISERE')"
+        [outline]="!playerWithDoubleMisere.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Poignée (8 atouts)</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'POIGNEE')"
+        [outline]="!playerWithPoignee.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Double poignée (10 atouts)</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'DOUBLE_POIGNEE')"
+        [outline]="!playerWithDoublePoignee.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Triple poignée (13 atouts)</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'TRIPLE_POIGNEE')"
+        [outline]="!playerWithTriplePoignee.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Associé</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id) {
+      <ion-chip
+        (click)="selectCalled(player)"
+        [outline]="form.controls.called.value !== player"
+        [disabled]="form.controls.taker.value === player"
+      >
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Petit au bout ?</ion-label>
+    </ion-item-divider>
+    <ion-radio-group [formControl]="form.controls.petitStatus">
+      <ion-item>
+        <ion-radio [value]="'NON'">Pas de petit au bout</ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-radio [value]="'GAGNE'">Petit gagné au bout</ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-radio [value]="'PERDU'">Petit perdu au bout</ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Comptage des points</ion-label>
+    </ion-item-divider>
+    <ion-chip
+      (click)="onSelectnombreBouts(0)"
+      [outline]="form.controls.nombreBouts.value !== 0">
+      Aucun bout
+    </ion-chip>
+    <ion-chip
+      (click)="onSelectnombreBouts(1)"
+      [outline]="form.controls.nombreBouts.value !== 1">
+      1 Bout
+    </ion-chip>
+    <ion-chip
+      (click)="onSelectnombreBouts(2)"
+      [outline]="form.controls.nombreBouts.value !== 2">
+      2 Bouts
+    </ion-chip>
+    <ion-chip
+      (click)="onSelectnombreBouts(3)"
+      [outline]="form.controls.nombreBouts.value !== 3">
+      3 Bouts
+    </ion-chip>
+    <ion-item lines="none" class="scores">
+      <div [ngClass]="{winning: form.controls.scoreAttaque.value | isAttaqueWinning : form.controls.nombreBouts.value}">
+        <span>ATQ</span>
+        <span>{{ form.controls.scoreAttaque.value }}</span>
+      </div>
+      <input type="range" min="0" max="91" value="50" [formControl]="form.controls.scoreAttaque">
+      <div [ngClass]="{winning: !(form.controls.scoreAttaque.value | isAttaqueWinning : form.controls.nombreBouts.value)}">
+        <span>DEF</span>
+        <span> {{ 91 - form.controls.scoreAttaque.value }}</span>
+      </div>
+    </ion-item>
+  </ion-item-group>
+</section>
+<ion-button (click)="onValidateClickHandler()" [disabled]="form.invalid">
+  Valider
+</ion-button>

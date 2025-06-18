@@ -13,6 +13,7 @@ export interface RoundDto {
   chelemStatus: ChelemStatus;
 
   scoreAttaque: number;
+  nombreBouts: 0 | 1 | 2 | 3;
 
   taker: PlayerDto;
   called?: PlayerDto;
