@@ -7,7 +7,7 @@ RUN rm -rf /usr/share/nginx/html/*
 COPY ./dist/score-tarot-front/browser /usr/share/nginx/html
 
 # (Optionnel) Configuration personnalisée de NGINX pour Angular routing (SPA)
-# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose le port par défaut
 EXPOSE 80
