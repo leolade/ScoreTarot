@@ -17,10 +17,9 @@
       @for (player of gameValue.players; track player.id) {
         <ion-col>{{ player.name }}</ion-col>
       }
-      <ion-col></ion-col>
     </ion-row>
     @for (round of roundsValue; track round.id) {
-      <ion-row>
+      <ion-row (click)="onRowClickHandler(round.id)">
         @for (player of gameValue.players; track player.id) {
           @if (player.id) {
             <ion-col class="score"
@@ -28,15 +27,12 @@
             </ion-col>
           }
         }
-        <ion-col>
-          <ion-button (click)="onEditClickHandler(round.id)" size="small">
-            <ion-icon name="create-outline"></ion-icon>
-          </ion-button>
-          <ion-button (click)="onDeleteClickHandler(round.id)" size="small">
-            <ion-icon name="trash-outline"></ion-icon>
-          </ion-button>
-        </ion-col>
       </ion-row>
+      <ion-action-sheet
+        [isOpen]="actionSheetOpened() === round.id"
+        [buttons]="actionSheetButtons"
+        (didDismiss)="onDismissClickHandler($event, round.id)"
+      ></ion-action-sheet>
     }
     <ion-item-divider>
       <ion-label>Totaux</ion-label>
@@ -51,8 +47,6 @@
           </ion-col>
         }
       }
-      <ion-col>
-      </ion-col>
     </ion-row>
   </ion-grid>
 }

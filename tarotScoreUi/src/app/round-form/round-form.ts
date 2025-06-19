@@ -217,6 +217,10 @@ export class RoundForm {
   }
 
   onAjouterJoueurClickHandler() {
+    const newPlayerName: string = this.nomNouveauJoueurFC.value.trim();
+    if (!newPlayerName || this.availablePlayers().filter(a => a.name === newPlayerName).length !== 0) {
+      return;
+    }
     const newPlayer = {name: this.nomNouveauJoueurFC.value};
     this.availablePlayers.set([...this.availablePlayers(), newPlayer]);
     this.onAddPlayerClickHandler(newPlayer)
@@ -308,5 +312,13 @@ export class RoundForm {
       return scoreAttaque === 91 ? "ANNONCE_REUSSI" : "ANNONCE_RATE"
     }
     return scoreAttaque === 91 ? "REUSSI_NON_ANNONCE" : "NON"
+  }
+
+  onDeletePlayerClickHandler($event: MouseEvent, player: PlayerDto) {
+    if (this.selectedPlayers().indexOf(player) === -1) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+    this.availablePlayers.set(this.availablePlayers().filter(iterator => iterator !== player));
   }
 }

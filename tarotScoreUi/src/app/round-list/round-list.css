@@ -1,6 +1,20 @@
 ion-row {
   flex-direction: row;
   flex-wrap: nowrap;
+  min-height: 30px;
+}
+@media (prefers-color-scheme: light)
+{
+  ion-row {
+    border-bottom: 1px solid lightgrey;
+  }
+}
+
+@media (prefers-color-scheme: dark)
+{
+  ion-row {
+    border-bottom: 1px solid darkgray;
+  }
 }
 
 ion-col {

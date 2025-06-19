@@ -1,6 +1,7 @@
-import {Component, computed, effect, inject, input, linkedSignal, Signal, WritableSignal} from '@angular/core';
+import {Component, computed, effect, inject, input, linkedSignal, signal, Signal, WritableSignal} from '@angular/core';
 import {GameDto} from '../dtos/game-dto';
 import {
+  IonActionSheet,
   IonButton,
   IonButtons,
   IonCol,
@@ -8,7 +9,9 @@ import {
   IonFabButton,
   IonGrid,
   IonHeader,
-  IonIcon, IonItemDivider, IonLabel,
+  IonIcon,
+  IonItemDivider,
+  IonLabel,
   IonRow,
   IonTitle,
   IonToolbar
@@ -38,7 +41,8 @@ import {SumScoreForPlayerPipe} from './sum-score-for-player-pipe';
     IsMaxScorePipe,
     SumScoreForPlayerPipe,
     IonItemDivider,
-    IonLabel
+    IonLabel,
+    IonActionSheet
   ],
   templateUrl: './round-list.html',
   styleUrl: './round-list.css'
@@ -50,6 +54,30 @@ export class RoundList {
   game = input.required<GameDto>();
   rounds: WritableSignal<RoundWithScoreDto[]> = linkedSignal(() => this.game().rounds);
   scores: Signal<{ [p in string]: number }[]> = computed(() => this.rounds().map(r => r.scores))
+  actionSheetOpened: WritableSignal<string> = signal('');
+  actionSheetButtons = [
+    {
+      text: 'Supprimer la partie',
+      role: 'destructive',
+      data: {
+        action: 'delete',
+      },
+    },
+    {
+      text: 'Modifier la partie',
+      role: 'edit',
+      data: {
+        action: 'edit',
+      },
+    },
+    {
+      text: 'Cancel',
+      role: 'cancel',
+      data: {
+        action: 'cancel',
+      },
+    },
+  ];
 
   constructor() {
     effect(() => {
@@ -81,5 +109,29 @@ export class RoundList {
         this.rounds.set(this.rounds().filter((round) => round.id !== roundId));
       }
     )
+  }
+
+  onRowClickHandler(id: string | undefined) {
+    if (!id) {
+      return;
+    }
+    this.actionSheetOpened.set(id);
+  }
+
+  onDismissClickHandler($event: any, id: string | undefined) {
+    if (!id) {
+      return;
+    }
+    this.actionSheetOpened.set('');
+    switch ($event.detail.role) {
+      case 'destructive':
+        this.onDeleteClickHandler(id)
+        break;
+      case 'edit':
+        this.onEditClickHandler(id);
+        break;
+      default:
+        break;
+    }
   }
 }

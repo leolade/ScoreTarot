@@ -27,10 +27,12 @@
         [outline]="!selectedPlayersValue.includes(player)"
         [disabled]="!selectedPlayersValue.includes(player) && selectedPlayersValue.length === 5">
         {{ player.name }}
+        <ion-icon name="close-circle" (click)="onDeletePlayerClickHandler($event, player)"></ion-icon>
       </ion-chip>
     }
     <ion-item lines="none">
       <ion-input label="Nouveau joueur" placeholder="Entrez le nom"
+                 autocapitalize="on"
                  (keyup.enter)="onAjouterJoueurClickHandler()"
                  [formControl]="nomNouveauJoueurFC"></ion-input>
       <ion-button (click)="onAjouterJoueurClickHandler()">Ajouter</ion-button>
