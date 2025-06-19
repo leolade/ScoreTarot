@@ -5,6 +5,7 @@ import fr.ladevie.tarot.score.business.enums.ChelemStatus;
 import fr.ladevie.tarot.score.business.enums.ContractType;
 import fr.ladevie.tarot.score.business.enums.PetitAuBoutStatus;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +14,8 @@ import java.util.stream.Collectors;
 public class RoundDTO {
 
     private UUID id;
+
+    private LocalDateTime createdDate;
 
     private ContractType contractType;
     private PetitAuBoutStatus petitStatus;
@@ -39,6 +42,7 @@ public class RoundDTO {
 
     public RoundDTO(RoundEntity entity) {
         this.id = entity.getId();
+        this.createdDate = entity.getCreatedDate();
         this.contractType = entity.getContractType();
         this.petitStatus = entity.getPetitAuBoutStatus();
         this.chelemStatus = entity.getChelemStatus();
@@ -187,6 +191,15 @@ public class RoundDTO {
 
     public RoundDTO setNombreBouts(Integer nombreBouts) {
         this.nombreBouts = nombreBouts;
+        return this;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public RoundDTO setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
         return this;
     }
 }

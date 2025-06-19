@@ -4,7 +4,9 @@ import fr.ladevie.tarot.score.business.enums.ChelemStatus;
 import fr.ladevie.tarot.score.business.enums.ContractType;
 import fr.ladevie.tarot.score.business.enums.PetitAuBoutStatus;
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -27,6 +29,8 @@ public class RoundEntity {
     private Integer scoreAttaque;
 
     private Integer nombreBouts;
+
+    private LocalDateTime createdDate;
 
     // Relations clés déplacées ici 👇
     @ManyToOne
@@ -199,5 +203,14 @@ public class RoundEntity {
 
     public void setPlayers(List<PlayerEntity> players) {
         this.players = players;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public RoundEntity setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+        return this;
     }
 }

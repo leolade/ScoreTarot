@@ -10,6 +10,7 @@ export interface RoundDto {
 
   contractType: ContractType;
   petitStatus: PetitAuBoutStatus;
+  createdDate: Date;
   chelemStatus: ChelemStatus;
 
   scoreAttaque: number;

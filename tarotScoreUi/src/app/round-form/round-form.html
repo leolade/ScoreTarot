@@ -76,72 +76,7 @@
 
   <ion-item-group>
     <ion-item-divider>
-      <ion-label>Misère</ion-label>
-    </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id + player.name) {
-      <ion-chip
-        (click)="togglePlayerAnnonce(player, 'MISERE')"
-        [outline]="!playerWithMisere.includes(player)">
-        {{ player.name }}
-      </ion-chip>
-    }
-  </ion-item-group>
-
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>Double misère</ion-label>
-    </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id + player.name) {
-      <ion-chip
-        (click)="togglePlayerAnnonce(player, 'DOUBLE_MISERE')"
-        [outline]="!playerWithDoubleMisere.includes(player)">
-        {{ player.name }}
-      </ion-chip>
-    }
-  </ion-item-group>
-
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>Poignée (8 atouts)</ion-label>
-    </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id + player.name) {
-      <ion-chip
-        (click)="togglePlayerAnnonce(player, 'POIGNEE')"
-        [outline]="!playerWithPoignee.includes(player)">
-        {{ player.name }}
-      </ion-chip>
-    }
-  </ion-item-group>
-
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>Double poignée (10 atouts)</ion-label>
-    </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id + player.name) {
-      <ion-chip
-        (click)="togglePlayerAnnonce(player, 'DOUBLE_POIGNEE')"
-        [outline]="!playerWithDoublePoignee.includes(player)">
-        {{ player.name }}
-      </ion-chip>
-    }
-  </ion-item-group>
-
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>Triple poignée (13 atouts)</ion-label>
-    </ion-item-divider>
-    @for (player of selectedPlayersValue; track player.id + player.name) {
-      <ion-chip
-        (click)="togglePlayerAnnonce(player, 'TRIPLE_POIGNEE')"
-        [outline]="!playerWithTriplePoignee.includes(player)">
-        {{ player.name }}
-      </ion-chip>
-    }
-  </ion-item-group>
-
-  <ion-item-group>
-    <ion-item-divider>
-      <ion-label>Associé</ion-label>
+      <ion-label>Appelée</ion-label>
     </ion-item-divider>
     @for (player of selectedPlayersValue; track player.id + player.name) {
       <ion-chip
@@ -207,6 +142,71 @@
         <span> {{ 91 - form.controls.scoreAttaque.value }}</span>
       </div>
     </ion-item>
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Misère</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id + player.name) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'MISERE')"
+        [outline]="!playerWithMisere.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Double misère</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id + player.name) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'DOUBLE_MISERE')"
+        [outline]="!playerWithDoubleMisere.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Poignée (8 atouts)</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id + player.name) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'POIGNEE')"
+        [outline]="!playerWithPoignee.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Double poignée (10 atouts)</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id + player.name) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'DOUBLE_POIGNEE')"
+        [outline]="!playerWithDoublePoignee.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
+  </ion-item-group>
+
+  <ion-item-group>
+    <ion-item-divider>
+      <ion-label>Triple poignée (13 atouts)</ion-label>
+    </ion-item-divider>
+    @for (player of selectedPlayersValue; track player.id + player.name) {
+      <ion-chip
+        (click)="togglePlayerAnnonce(player, 'TRIPLE_POIGNEE')"
+        [outline]="!playerWithTriplePoignee.includes(player)">
+        {{ player.name }}
+      </ion-chip>
+    }
   </ion-item-group>
 </section>
 <ion-button (click)="onValidateClickHandler()" [disabled]="form.invalid">

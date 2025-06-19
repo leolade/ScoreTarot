@@ -8,10 +8,7 @@ import fr.ladevie.tarot.score.exceptions.GameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -44,6 +41,7 @@ public class GameFacade {
         RoundEntity round = new RoundEntity();
         round.setGame(game);
         roundDTOMapper.patchBO(round, roundDTO);
+        round.setCreatedDate(LocalDateTime.now());
         this.roundRepository.save(round);
     }
 
@@ -51,10 +49,12 @@ public class GameFacade {
         GameEntity game = this.gameRepository.findById(UUID.fromString(id)).orElseThrow(GameNotFoundException::new);
         GameDTO gameDTO = new GameDTO();
         gameDTO.setId(game.getId());
+        gameDTO.setCreatedDate(game.getCreatedAt());
         gameDTO.setRounds(
                 game
                         .getRounds()
                         .stream()
+                        .sorted(Comparator.comparing(RoundEntity::getCreatedDate, Comparator.nullsFirst(Comparator.naturalOrder())))
                         .map(roundWithScoresDTOMapper::toDto)
                         .collect(Collectors.toList()));
         gameDTO.setPlayers(game.getRounds()
@@ -75,5 +75,9 @@ public class GameFacade {
 
         game = this.gameRepository.save(game);
         return game.getId();
+    }
+
+    public void deleteGame(String id) {
+        this.gameRepository.deleteById(UUID.fromString(id));
     }
 }

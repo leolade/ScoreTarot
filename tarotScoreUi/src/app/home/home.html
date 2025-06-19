@@ -14,18 +14,42 @@
 
   <ion-button (click)="onNewGameClickHandler()" fill="clear">Créer une partie</ion-button>
 </ion-card>
-<!--&lt;!&ndash;<p-card>&ndash;&gt;-->
-<!--&lt;!&ndash;  <ng-template #title> Reprendre une partie </ng-template>&ndash;&gt;-->
-<!--&lt;!&ndash;  <p>&ndash;&gt;-->
-<!--&lt;!&ndash;    Reprendre une partie à l'aide d'un code&ndash;&gt;-->
-<!--&lt;!&ndash;  </p>&ndash;&gt;-->
-<!--&lt;!&ndash;  <p-floatlabel variant="on">&ndash;&gt;-->
-<!--&lt;!&ndash;    <input pInputText id="on_label" autocomplete="off" />&ndash;&gt;-->
-<!--&lt;!&ndash;    <label for="on_label">Code de la partie</label>&ndash;&gt;-->
-<!--&lt;!&ndash;  </p-floatlabel>&ndash;&gt;-->
-<!--&lt;!&ndash;  <ng-template #footer>&ndash;&gt;-->
-<!--&lt;!&ndash;    <div class="flex gap-4 mt-1">&ndash;&gt;-->
-<!--&lt;!&ndash;      <p-button label="Reprendre la partie" class="w-full" styleClass="w-full" />&ndash;&gt;-->
-<!--&lt;!&ndash;    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;  </ng-template>&ndash;&gt;-->
-<!--&lt;!&ndash;</p-card>&ndash;&gt;-->
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Rejoindre une partie</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-input placeholder="id de la partie" label="Code de partie" [formControl]="idPartieJoinFC"></ion-input>
+  </ion-card-content>
+
+  <ion-button (click)="onJoinGameClickHandler()" fill="clear">Rejoindre la partie</ion-button>
+</ion-card>
+
+@for(game of games(); track game.id) {
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Reprendre la partie</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div>
+      Partie créée le {{game.createdDate | date:'dd/MM/yyyy à HH:mm'}}
+    </div>
+    <div>
+      @if (game.rounds.length) {
+        Dernière donne le {{game.rounds[game.rounds.length - 1].createdDate | date:'dd/MM/yyyy à HH:mm'}}
+      } @else {
+        Aucune donne jouée
+      }
+    </div>
+  </ion-card-content>
+  <ion-button fill="clear" (click)="onResumeGameClickHandler(game.id)">Reprendre</ion-button>
+  <ion-button fill="clear" id="click-trigger" (click)="onShareCodeClickHandler(game.id)">Partager le code</ion-button>
+  <ion-button fill="clear" color="danger" (click)="onDeleteGameClickHandler(game.id)" >Supprimer</ion-button>
+  <ion-popover trigger="click-trigger" triggerAction="click">
+    <ng-template>
+      <ion-content class="ion-padding">Code copié dans le presse papier !</ion-content>
+    </ng-template>
+  </ion-popover>
+</ion-card>
+}

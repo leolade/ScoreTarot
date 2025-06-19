@@ -82,6 +82,14 @@
   optionalDependencies:
     lmdb "3.3.0"
 
+"@angular/cdk@^20.0.3":
+  version "20.0.3"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-20.0.3.tgz#d233bcc345cec9a05f1fec3459a4e7bcc3532f07"
+  integrity sha512-70KG8GpK4aV9j5hUkpDZJQ6oMgCuaCRY6JX1axPxkNtQaiK6PAmTfQLiGqF2cYhbQneeq3uGvTorAjRfvp8NPQ==
+  dependencies:
+    parse5 "^7.1.2"
+    tslib "^2.3.0"
+
 "@angular/cli@^20.0.2":
   version "20.0.3"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-20.0.3.tgz#f142e80fbb9fad629cefb25ed768d24bcda3fcc5"
@@ -157,6 +165,13 @@
   version "20.0.4"
   resolved "https://registry.yarnpkg.com/@angular/router/-/router-20.0.4.tgz#4b09ea17f640a8f98c1b273b49418b73ad91ed76"
   integrity sha512-t02ukwKh+YDZutR09ZYJVLaC+OPyDxu6ll7A2MFK0BNLPpD9oQc0lDwJZSrqfAhlXU0arWUjmwkNvFdh21/Z5Q==
+  dependencies:
+    tslib "^2.3.0"
+
+"@angular/service-worker@^20.0.0":
+  version "20.0.4"
+  resolved "https://registry.yarnpkg.com/@angular/service-worker/-/service-worker-20.0.4.tgz#c89de0f03a181cc33b2031e452d31146aaf46a34"
+  integrity sha512-nXhEz6TR1xSLNYfKOt5njguyIHgl9M03cy93eqOEBzd04jt/biUUGcoGUdNqsEZM+z19incI4rRrgPfAef7xFw==
   dependencies:
     tslib "^2.3.0"
 
@@ -3232,7 +3247,7 @@ parse5-sax-parser@^7.0.0:
   dependencies:
     parse5 "^7.0.0"
 
-parse5@^7.0.0:
+parse5@^7.0.0, parse5@^7.1.2:
   version "7.3.0"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-7.3.0.tgz#d7e224fa72399c7a175099f45fc2ad024b05ec05"
   integrity sha512-IInvU7fabl34qmi9gY8XOVxhYyMyuH2xUNpb2q8/Y+7552KlejkRvqvD19nMoUW/uQGGbqNpA6Tufu5FL5BZgw==

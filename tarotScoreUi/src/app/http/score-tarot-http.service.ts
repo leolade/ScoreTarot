@@ -29,10 +29,14 @@ export class ScoreTarotHttpService {
   }
 
   editRound(roundId: string, round: RoundDto): Observable<void> {
-    return this.httpClient.post<void>(`${environment.apiURL}/tarot/score/round/${roundId}`, round);
+    return this.httpClient.put<void>(`${environment.apiURL}/tarot/score/round/${roundId}`, round);
   }
 
   deleteRound(roundId: string) {
     return this.httpClient.delete(`${environment.apiURL}/tarot/score/round/${roundId}`);
+  }
+
+  deleteGame(gameId: string): Observable<void> {
+    return this.httpClient.delete<void>(`${environment.apiURL}/tarot/score/game/${gameId}`);
   }
 }

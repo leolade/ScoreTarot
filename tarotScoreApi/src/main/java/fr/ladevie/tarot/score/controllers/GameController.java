@@ -27,6 +27,11 @@ public class GameController {
         return this.gameFacade.getGame(id);
     }
 
+    @DeleteMapping("{id}")
+    public void deleteGame(@PathVariable String id) {
+        this.gameFacade.deleteGame(id);
+    }
+
     @PostMapping("{id}/round")
     public void addRound(@PathVariable String id, @RequestBody RoundDTO roundDTO) {
         this.gameFacade.addRound(id, roundDTO);
